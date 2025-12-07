@@ -118,7 +118,7 @@ void addLog(){
         token = strtok(NULL, ",");    //to study
     }
     // Ask user for date
-    char date[20];
+    char date[14];
     printf("Enter Date (DD-MM-YYYY): ");
     scanf("%s", date);
     getchar();      //consume newline
@@ -129,13 +129,13 @@ void addLog(){
         return;
     }
     fprintf(out, "------------------------\n");
-    fprintf(out, "Date     : %s\n", date);
+    fprintf(out, "Date       : %s\n", date);
     for (int i = 0; i < fieldCount; i++) {
         char input[100];
         printf("Enter %s: ", fields[i]);
         fgets(input, sizeof(input), stdin);
         input[strcspn(input, "\n")] = '\0'; // remove newline
-        fprintf(out, "%-9s: %s\n", fields[i], input);
+        fprintf(out, "%-11s: %s\n", fields[i], input);
         free(fields[i]);
     }
     fprintf(out, "------------------------\n");
@@ -144,6 +144,12 @@ void addLog(){
     fclose(out);
 
     printf("Log saved successfully!\n");
+}
+
+void analysis() {
+    const char *python_command = ".\\\\.venv\\\\Scripts\\\\python.exe -u analysis.py";
+    printf("Executing command:\n%s\n\n", python_command);
+    int result = system(python_command);
 }
 
 void viewLog(){
@@ -199,7 +205,8 @@ int main() {
         printf("1. Add new log\n");
         printf("2. View existing log\n");
         printf("3. Add new Field\n");
-        printf("4. Exit the program\n");
+        printf("4. Data Analysis (Python script)\n");
+        printf("5. Exit the program\n");
         scanf("%d",&choice);
         switch (choice) {
             case 1:
@@ -212,11 +219,14 @@ int main() {
                 addField();
                 break;
             case 4:
-                printf("Exiting program...\n");
+                analysis();
+                printf("Running data analysis...\n");
+            case 5:
+                printf("Thank you for using the Tracker...\n");
                 break;
             default:
                 printf("Invalid choice! Please select 1, 2, 3 or 4.\n");
             }
-    }while(choice!=4);
+    }while(choice!=5);
     return 0;
 }
